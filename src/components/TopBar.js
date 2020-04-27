@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 function ToolBar(props) {
     const classes = useStyles();
+
     //下载图片
     const downloadImage = () => {
         props.graph.downloadImage();
@@ -32,10 +33,13 @@ function ToolBar(props) {
     //保存数据
     const saveData = () => {
         let data = props.graph.save();
-        let userId = "09a954b2456d4292b2891251ffac3aac";
-        let desc = "描述";
-        let name = "名称";
-        axios.post("http://192.168.98.11:8080/erd/user-data/saveErd",{userId,data:JSON.stringify(data),desc,name})
+        // let userId = props.match.params.userId;
+        console.info(props.match);
+        let dataId = props.dataId;
+        // let desc = "描述";
+        // let name = "名称";
+        axios.post("http://192.168.98.11:8080/erd/user-data/updateErd",
+            {data:JSON.stringify(data),dataId})
             .then((res)=>{
                 console.log(res.data)
             });

@@ -98,12 +98,15 @@ export default function (props) {
                 .then((res) => {
                     let erd = res.data.data;
                     erd = JSON.parse(erd);
-                    erd.data = JSON.parse(erd.data);
-                    setErdData(erd);
-                    console.info(erd.data);
+                    if(typeof erd.data!=="undefined"){
+                        console.info(erd.data);
+                        erd.data = JSON.parse(erd.data);
+                    }else {
+                        erd.data={}
+                    }
+                    // setErdData(erd);
                     graph.data(erd.data);
                     graph.render();
-
                 });
         };
         fetchData();
@@ -159,7 +162,7 @@ export default function (props) {
 
     return <div ref={ref}>
         <ToolBar graph={rootGraph} handleChange={switchMode} editMode={editMode} checked={fastEdit}
-                 toggleChecked={fastEditSwitch}/>
+                 toggleChecked={fastEditSwitch} dataId={props.match.params.dataId}/>
         {fastEdit && showNodeTooltip &&
         <ToolTip x={nodeTooltipX} y={nodeTooltipY}
                  removeNode={removeNode} updateLabel={updateLabel} label={model.label}

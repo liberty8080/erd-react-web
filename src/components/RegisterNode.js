@@ -1,4 +1,3 @@
-//todo：添加属性节点样式与实体节点样式
 import G6 from "@antv/g6"
 
 G6.registerNode('entity', {
