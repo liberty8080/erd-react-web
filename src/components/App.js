@@ -27,7 +27,6 @@ export default function (props) {
         className: 'minimap',
         type: 'delegate',
         position: 'absolute'
-
     });
 // 实例化 grid 插件
     const grid = new G6.Grid();
@@ -40,7 +39,6 @@ export default function (props) {
             };
             const {item} = evt;
             const model = item.getModel();
-            console.info(graph);
             const {x, y} = model;
             const point = graph.getCanvasByPoint(x, y);
             setModel(model);
@@ -107,9 +105,9 @@ export default function (props) {
                     // 默认交互模式
                     default: ['drag-node', 'drag-canvas', 'zoom-canvas'],
                     // 增加节点交互模式
-                    addEntity: ['click-add-node', 'click-select'],
+                    addEntity: ['click-add-entity', 'click-select'],
 
-                    addProperty: ['click-add-node', 'click-select'],
+                    addProperty: ['click-add-property', 'click-select'],
                     // 增加边交互模式
                     addEdge: ['click-add-edge', 'click-select'],
                 },

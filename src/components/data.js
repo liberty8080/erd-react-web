@@ -12,7 +12,7 @@ export const data = {
             label: 'customer_id',
             x: 120,
             y: 160,
-            type: 'ellipse',
+            type: 'property',
             size: [80, 40]
         }, {
             id: 'name',

@@ -28,7 +28,7 @@ G6.registerBehavior('click-add-edge', {
             this.edge = graph.addItem('edge', {
                 source: model.id,
                 target: point,
-                type: 'relation'
+                type: 'edge'
             });
             this.addingEdge = true;
         }
@@ -57,7 +57,7 @@ G6.registerBehavior('click-add-edge', {
 });
 
 // 注册节点
-G6.registerBehavior('click-add-node', {
+G6.registerBehavior('click-add-entity', {
     getEvents() {
         return {
             'canvas:click': 'onClick'
@@ -65,14 +65,34 @@ G6.registerBehavior('click-add-node', {
     },
     onClick(ev) {
         const graph = this.graph;
-        const node = this.graph.addItem('node', {
+        const node = graph.addItem('node', {
             x: ev.x,
             //y: ev.canvasY,   //官方教程坐标，不知为何是canvasXY，实际应为x,y
             y: ev.y,
             id: `node-${addedCount}`, // 生成唯一的 id
-            type: 'ellipse'
+            type: 'entity'
 
         });
         addedCount++;
     }
 });
+
+G6.registerBehavior("click-add-property",{
+    getEvents() {
+        return {
+            'canvas:click': 'onClick'
+        };
+    },
+    onClick(ev) {
+        const graph = this.graph;
+        const node = graph.addItem('node', {
+            x: ev.x,
+            //y: ev.canvasY,   //官方教程坐标，不知为何是canvasXY，实际应为x,y
+            y: ev.y,
+            id: `node-${addedCount}`, // 生成唯一的 id
+            type: 'property'
+
+        });
+        addedCount++;
+    }
+})

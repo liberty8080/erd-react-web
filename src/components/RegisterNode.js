@@ -12,3 +12,13 @@ G6.registerNode('entity', {
     },
     'rect');
 
+G6.registerNode('property',{
+    options:{
+        style:{
+            stroke:"#72CC4A",
+            fill:'#6fd4ff'
+        },
+        size:[100,40]
+    }
+},'ellipse');
+
