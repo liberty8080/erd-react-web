@@ -2,7 +2,6 @@ import {AppBar, Toolbar, IconButton, Typography, makeStyles, Button} from "@mate
 import MenuIcon from '@material-ui/icons/Menu';
 
 import React from "react";
-import SignupPage from "./SignupPage";
 
 const useStyles = makeStyles((theme) => ({
     root: {
