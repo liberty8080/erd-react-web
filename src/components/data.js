@@ -13,76 +13,66 @@ export const data = {
             x: 120,
             y: 160,
             type: 'property',
-            size: [80, 40]
         }, {
             id: 'name',
             label: 'name',
             x: 140,
             y: 100,
-            type: 'ellipse',
-            size: [80, 40]
+            type: 'property',
         }, {
             id: 'address',
             label: 'address',
             x: 180,
             y: 60,
-            type: 'ellipse',
-            size: [80, 40]
+            type: 'property',
         }, {
             id: 'email',
             label: 'email',
             x: 240,
             y: 110,
-            type: 'ellipse',
-            size: [80, 40]
+            type: 'property',
         }, {
             id: 'order',
             label: 'order',
             x: 400,
             y: 200,
-            type: 'rect',
-            size: [60, 40]
+            type: 'entity',
         }, {
             id: 'order_id',
             label: 'order_id',
             x: 320,
             y: 130,
-            type: 'ellipse',
-            size: [80, 40]
+            type: 'property',
         }, {
             id: 'order_status',
             label: 'order_status',
             x: 380,
             y: 80,
-            type: 'ellipse',
-            size: [80, 40]
+            type: 'property',
         }, {
             id: 'total_price',
             label: 'total_price',
             x: 440,
             y: 150,
-            type: 'ellipse',
-            size: [80, 40]
+            type: 'property',
         }, {
             id: 'employee',
             label: 'employee',
             x: 380,
             y: 380,
-            type: 'rect',
-            size: [60, 40]
+            type: 'entity',
         }, {
             id: 'employee_id',
             label: 'employee_id',
             x: 320,
             y: 440,
-            type: 'ellipse',
-            size: [80, 40]
+            type: 'property',
         }, {
             id: 'title',
             label: 'title',
             x: 440,
             y: 440,
-            type: 'ellipse',
+            type: 'property',
             size: [80, 40]
         }],
     edges: [{

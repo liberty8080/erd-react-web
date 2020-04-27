@@ -99,10 +99,10 @@ export default function ErdListPage(props) {
                                     />
                                     <CardContent className={classes.cardContent}>
                                         <Typography gutterBottom variant="h5" component="h2">
-                                            添加标题字段
+                                            {diagram.dataName}
                                         </Typography>
                                         <Typography>
-                                            添加描述字段
+                                            {diagram.dataDesc}
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
