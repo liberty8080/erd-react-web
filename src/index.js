@@ -22,7 +22,7 @@ const store = createStore(
 ReactDOM.render(
     <Provider store={store}>
         <Router>
-            <NavigationBar/>
+            {/*<NavigationBar/>*/}
             {routers}
         </Router>
     </Provider>,
