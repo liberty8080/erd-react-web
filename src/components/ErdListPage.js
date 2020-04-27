@@ -11,6 +11,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import axios from 'axios';
+import {useHistory} from 'react-router-dom';
 
 function Copyright() {
     return (
@@ -60,10 +61,12 @@ const useStyles = makeStyles((theme) => ({
 export default function ErdListPage(props) {
     const classes = useStyles();
     const [diagrams, setDiagrams] = useState([]);
+    const [userId, setUserId] = useState();
+    const history = useHistory();
 
     useEffect(() => {
         //在渲染页面之前获取到列表的数据
-        const userId = props.match.params.userId;
+        setUserId(props.match.params.userId);
         const fetchData = async () => {
             await axios("http://192.168.98.11:8080/erd/user-data/listErd", {params: {userId}})
                 .then((res) => {
@@ -73,7 +76,7 @@ export default function ErdListPage(props) {
                 });
         };
         fetchData().then();
-    }, [props.match.params.userId]);
+    }, [userId]);
 
     const deleteDiagram = async (dataId) => {
         setDiagrams(diagrams.filter(d => d.dataId !== dataId));
@@ -82,6 +85,13 @@ export default function ErdListPage(props) {
                 console.info(res)
             })
     };
+
+    const editDiagram = async (dataId) => {
+        let path = "/app/" + userId + "/" + dataId;
+        console.info(path);
+        history.push(path)
+    };
+
     return (
         <React.Fragment>
             <CssBaseline/>
@@ -106,7 +116,7 @@ export default function ErdListPage(props) {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button size="small" color="primary">
+                                        <Button size="small" color="primary" onClick={() => editDiagram(diagram.dataId)}>
                                             编辑
                                         </Button>
                                         <Button size="small" color="primary"

@@ -7,6 +7,7 @@ import './RegisterBehavior';
 import './RegisterEdge';
 import './RegisterNode';
 import ToolTip from "./ToolTip";
+import axios from "axios";
 
 export default function (props) {
     const ref = React.useRef(null);
@@ -20,7 +21,7 @@ export default function (props) {
     const [nodeModel, setNodeModel] = useState();
     const [editMode, setEditMode] = useState("default");
     const [fastEdit, setFastEdit] = useState(false);
-
+    const [erdData,setErdData] = useState({dataName:"",dataId:"",dataDesc:"",data:{}});
 // 实例化 minimap 插件
     const minimap = new G6.Minimap({
         size: [100, 100],
@@ -92,6 +93,22 @@ export default function (props) {
     };
 
     useEffect(() => {
+        const fetchData = async () => {
+           await  axios("http://192.168.98.11:8080/erd/user-data/getDataById", {params: {dataId:props.match.params.dataId}})
+                .then((res) => {
+                    let erd = res.data.data;
+                    erd = JSON.parse(erd);
+                    erd.data = JSON.parse(erd.data);
+                    setErdData(erd);
+                    console.info(erd.data);
+                    graph.data(erd.data);
+                    graph.render();
+
+                });
+        };
+        fetchData();
+
+
         if (!graph) {
             graph = new G6.Graph({
                 container: ReactDOM.findDOMNode(ref.current),
@@ -134,8 +151,6 @@ export default function (props) {
             setRootGraph(graph);
 
         }
-        graph.data(data);
-        graph.render();
 
         bindEvents();
 
@@ -145,8 +160,9 @@ export default function (props) {
     return <div ref={ref}>
         <ToolBar graph={rootGraph} handleChange={switchMode} editMode={editMode} checked={fastEdit}
                  toggleChecked={fastEditSwitch}/>
-        {fastEdit && showNodeTooltip && <ToolTip x={nodeTooltipX} y={nodeTooltipY}
-                                                 removeNode={removeNode} updateLabel={updateLabel} label={model.label}
-                                                 destroyToolTip={destroyToolTip}/>}
+        {fastEdit && showNodeTooltip &&
+        <ToolTip x={nodeTooltipX} y={nodeTooltipY}
+                 removeNode={removeNode} updateLabel={updateLabel} label={model.label}
+                 destroyToolTip={destroyToolTip}/>}
     </div>;
 }

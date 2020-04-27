@@ -5,6 +5,7 @@ import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import SaveIcon from '@material-ui/icons/Save';
 import SwitchEditModes from "./SwitchEditModes";
 import FastEdit from "./FastEdit";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -29,9 +30,15 @@ function ToolBar(props) {
     };
 
     //保存数据
-    //todo:保存到数据库
     const saveData = () => {
         let data = props.graph.save();
+        let userId = "09a954b2456d4292b2891251ffac3aac";
+        let desc = "描述";
+        let name = "名称";
+        axios.post("http://192.168.98.11:8080/erd/user-data/saveErd",{userId,data:JSON.stringify(data),desc,name})
+            .then((res)=>{
+                console.log(res.data)
+            });
         console.log(data)
     };
 

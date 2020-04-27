@@ -10,7 +10,7 @@ export default (
             <Route path="/signin" component={SignIn}/>
             <Route path="/signup" component={SignupPage}/>
             <Route path="/erdList/:userId" component={ErdListPage}/>
-            <Route path="/app" component={App}/>
+            <Route path="/app/:userId/:dataId" component={App}/>
     </div>
 )
 
