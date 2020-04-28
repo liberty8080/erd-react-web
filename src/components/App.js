@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import ReactDOM from 'react-dom';
-import {data} from './data';
 import G6 from '@antv/g6';
 import ToolBar from "./TopBar";
 import './RegisterBehavior';
@@ -21,7 +20,6 @@ export default function (props) {
     const [nodeModel, setNodeModel] = useState();
     const [editMode, setEditMode] = useState("default");
     const [fastEdit, setFastEdit] = useState(false);
-    const [erdData,setErdData] = useState({dataName:"",dataId:"",dataDesc:"",data:{}});
 // 实例化 minimap 插件
     const minimap = new G6.Minimap({
         size: [100, 100],
