@@ -59,6 +59,9 @@ const useStyles = makeStyles((theme) => ({
     footer: {
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(6),
+        position:"absolute",
+        bottom:0,
+        width:"100%"
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -194,10 +197,10 @@ export default function ErdListPage(props) {
                                         title="Image title"
                                     />
                                     <CardContent className={classes.cardContent}>
-                                        <Typography gutterBottom variant="h5" component="h2">
+                                        <Typography gutterBottom variant="h5" component="h2" defaultValue="Title">
                                             {diagram.dataName}
                                         </Typography>
-                                        <Typography>
+                                        <Typography defaultValue="description">
                                             {diagram.dataDesc}
                                         </Typography>
                                     </CardContent>
@@ -221,9 +224,6 @@ export default function ErdListPage(props) {
             <footer className={classes.footer}>
                 <Typography variant="h6" align="center" gutterBottom>
                     欢迎使用ERD生成系统
-                </Typography>
-                <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-
                 </Typography>
                 <Copyright/>
             </footer>

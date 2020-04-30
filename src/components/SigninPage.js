@@ -100,10 +100,10 @@ export default function SignIn(props) {
                         autoComplete="current-password"
                         onChange={(event) => setPassword(event.target.value)}
                     />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary"/>}
-                        label="记住密码"
-                    />
+                    {/*<FormControlLabel*/}
+                    {/*    control={<Checkbox value="remember" color="primary"/>}*/}
+                    {/*    label="记住密码"*/}
+                    {/*/>*/}
                     <Button
                         type="button"
                         fullWidth
@@ -115,11 +115,11 @@ export default function SignIn(props) {
                         登录
                     </Button>
                     <Grid container>
-                        <Grid item xs>
+{/*                        <Grid item xs>
                             <Link href="#" variant="body2">
                                 忘记密码?
                             </Link>
-                        </Grid>
+                        </Grid>*/}
                         <Grid item>
                             <Link href="/signup" variant="body2">
                                 {"没有账号？点击注册"}

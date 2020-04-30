@@ -13,6 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
+import {useHistory} from 'react-router-dom';
+import {data} from "./data";
+
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -49,13 +52,20 @@ const useStyles = makeStyles((theme) => ({
 export default function SignupPage(props) {
     const classes = useStyles();
     // const [userId,setUserId] = useState();
-    const [password,setPassword] = useState();
-    const [name,setName] = useState();
-    const handleSubmit = (e)=>{
+    const [password, setPassword] = useState();
+    const [name, setName] = useState();
+    const history = useHistory();
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post('http://192.168.98.11:8080/erd/user/addUser',{name,password})
-            .then((response)=>console.info(response.data))
+        axios.post('http://192.168.98.11:8080/erd/user/addUser', {name, password})
+            .then((response) => {
+                let userId = response.data.data;
+                if(response.data.success === true)
+                {
+                    history.push("/erdList/" + userId)
+                }
+            })
     };
     return (
         <Container component="main" maxWidth="xs">
@@ -80,7 +90,7 @@ export default function SignupPage(props) {
                                 label="用户名"
                                 name="name"
                                 autoComplete="name"
-                                onChange={(event)=> setName(event.target.value)}
+                                onChange={(event) => setName(event.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -93,15 +103,15 @@ export default function SignupPage(props) {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
-                                onChange={(event)=> setPassword(event.target.value)}
+                                onChange={(event) => setPassword(event.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+{/*                        <Grid item xs={12}>
                             <FormControlLabel
                                 control={<Checkbox value="allowExtraEmails" color="primary"/>}
                                 label="接受用户协议"
                             />
-                        </Grid>
+                        </Grid>*/}
                     </Grid>
                     <Button
                         type="button"
