@@ -14,8 +14,11 @@ import axios from 'axios';
 import {useHistory} from 'react-router-dom';
 import {v4 as uuidv4} from 'uuid';
 import {
-    AppBar, Dialog, Toolbar, DialogActions, DialogTitle,
-    DialogContent, DialogContentText, TextField} from "@material-ui/core";
+    AppBar, Toolbar,
+
+} from "@material-ui/core";
+import FastAddERD from "./FastAddERD";
+import AddEmptyErd from "./AddEmptyErd";
 
 function Copyright() {
     return (
@@ -59,9 +62,9 @@ const useStyles = makeStyles((theme) => ({
     footer: {
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(6),
-        position:"absolute",
-        bottom:0,
-        width:"100%"
+        position: "absolute",
+        bottom: 0,
+        width: "100%"
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -78,10 +81,40 @@ export default function ErdListPage(props) {
 
     const [diagrams, setDiagrams] = useState([]);
     const [userId, setUserId] = useState();
-    const [open, setOpen] = React.useState(false);
-    const [dataName,setDataName]=useState();
-    const [desc,setDesc]=useState();
+    const [emptyErdDialog, setEmptyDialog] = useState(
+        {
+            open: false,
+            dataName: "",
+            desc: ""
+        }
+    );
 
+    const [fastAddErdDialog, setFastAddErdDialog] = useState(
+        {
+            open: false,
+            dataName: "",
+            desc: "",
+            erdData: {nodes: [], edges: [], groups: []}
+        });
+
+    const [nodes, setNodes] = useState([
+        {
+            id: "",
+            type: "",
+            label: ""
+        }
+    ]);
+
+    const [edges, setEdges] = useState([{
+        id: "",
+        source: "",
+        target: "",
+        sourceEntity: "",
+        targetEntity: "",
+        relation: "",
+        relationName: "",
+        type: ""
+    }]);
 
     useEffect(() => {
         //在渲染页面之前获取到列表的数据
@@ -95,7 +128,7 @@ export default function ErdListPage(props) {
                 });
         };
         fetchData().then();
-    }, [userId]);
+    }, [userId, emptyErdDialog]);
 
 
     const deleteDiagram = async (dataId) => {
@@ -110,24 +143,108 @@ export default function ErdListPage(props) {
         history.push(path)
     };
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const handleAccept = () => {
-        setOpen(false);
-        let dataId = uuidv4().replace(/-/g,"");
-        console.log(dataId,dataName,desc);
-        axios.post("http://192.168.98.11:8080/erd/user-data/saveErd",{userId,dataId,desc,name:dataName})
-            .then((res)=>{
-                if(true===res.data.success){
-                    history.push("/app/"+userId+"/"+dataId)
+        setEmptyDialog({...emptyErdDialog, open: false});
+        let dataId = uuidv4().replace(/-/g, "");
+        axios.post("http://192.168.98.11:8080/erd/user-data/saveErd", {
+            userId, dataId,
+            desc: emptyErdDialog.desc,
+            name: emptyErdDialog.dataName,
+        })
+            .then((res) => {
+                if (true === res.data.success) {
+                    history.push("/app/" + userId + "/" + dataId)
                 }
             })
+    };
+
+    const fastAddAccept = () => {
+        let erdData = {nodes: nodes, edges: edges, groups: []};
+        setFastAddErdDialog({...fastAddErdDialog, open: false});
+        let dataId = uuidv4().replace(/-/g, "");
+
+        axios.post("http://192.168.98.11:8080/erd/user-data/saveErd", {
+            userId, dataId,
+            desc: fastAddErdDialog.desc,
+            name: fastAddErdDialog.dataName,
+            data: JSON.stringify(erdData)
+        })
+            .then((res) => {
+                if (true === res.data.success) {
+                    history.push("/app/" + userId + "/" + dataId)
+                }
+            })
+    };
+
+    const handleChange = (e) => {
+        setEmptyDialog({...emptyErdDialog, [e.target.name]: e.target.value});
+    };
+
+    const fastErdChange = (e) => {
+        setFastAddErdDialog({...fastAddErdDialog, [e.target.name]: e.target.value})
+    };
+
+    const entityChange = index => e => {
+        let newEntity = [...nodes];
+        let node = {
+            id: "node-" + uuidv4(),
+            type: "entity",
+            label: ""
+        };
+        node.label = e.target.value;
+        newEntity[index] = node;
+        setNodes(newEntity);
+    };
+
+
+    const relationChange = index => e => {
+        let newRelation = [...edges];
+        let edge = newRelation[index];
+        edge.id = "edge-" + uuidv4();
+        edge.type = "relation";
+        if (e.target.name === "source") {
+            edge.source = e.target.value;
+        }
+        if (e.target.name === "target") {
+            edge.target = e.target.value;
+        }
+        if (e.target.name === "relation") {
+            edge.relation = e.target.value;
+            switch (e.target.value) {
+                case "1to1":
+                    edge.sourceEntity = "1";
+                    edge.targetEntity = "1";
+                    break;
+                case "1toN":
+                    edge.targetEntity = "N";
+                    edge.sourceEntity = "1";
+                    break;
+                case "NtoN" :
+                    edge.sourceEntity = "N";
+                    edge.targetEntity = "N";
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (e.target.name === "relationName") {
+            edge.relationName = e.target.value;
+        }
+        newRelation[index] = edge;
+        /*       console.info(newRelation[index+1]);
+                   newRelation[index + 1] = {
+                       id: "",
+                       source: "",
+                       target: "",
+                       sourceEntity: "",
+                       targetEntity: "",
+                       relation: "",
+                       type:"",
+                       relationName: ""
+                   };*/
+
+        setEdges(newRelation);
     };
 
     return (
@@ -140,49 +257,66 @@ export default function ErdListPage(props) {
                             ErdEditor
                         </Typography>
                         <div className={classes.TopBarSpace}/>
-                        <Button variant="outlined" onClick={handleClickOpen} style={{color: "white"}}>
+                        <Button variant="outlined"
+                                onClick={() => setFastAddErdDialog({...fastAddErdDialog, open: true})}
+                                style={{color: "white"}}>
+                            快速创建ER图
+                        </Button>
+                        <FastAddERD erdData={fastAddErdDialog}
+                                    handleClose={() => {
+                                        setFastAddErdDialog({...fastAddErdDialog, open: false})
+                                    }}
+                                    handleAccept={fastAddAccept}
+                                    onChange={fastErdChange}
+                                    entityChange={entityChange}
+                                    relationChange={relationChange}
+                                    nodes={nodes}
+                                    edges={edges}
+
+                                    addRelation={() => {
+                                        setEdges([...edges, {
+                                            id: "",
+                                            source: "",
+                                            target: "",
+                                            sourceEntity: "",
+                                            targetEntity: "",
+                                            relation: "",
+                                            type: "",
+                                            relationName: ""
+                                        }])
+                                    }}
+                                    addEntity={() => {
+                                        setNodes([...nodes, {
+                                            id: "",
+                                            type: "",
+                                            label: ""
+                                        }])
+                                    }}
+                                    removeEntity={(index0) => {
+                                        setNodes(nodes.filter((item, index) => index !== index0))
+                                    }}
+                                    removeRelation={(index0) => {
+                                        setEdges(edges.filter((item, index) => index !== index0))
+                                    }}
+                        />
+                        <Button variant="outlined"
+                                onClick={() =>
+                                    setEmptyDialog({...emptyErdDialog, open: true})}
+                                style={{color: "white"}}
+                        >
                             新建E-R图
                         </Button>
+                        <AddEmptyErd erdData={emptyErdDialog}
+                                     handleClose={() => {
+                                         setEmptyDialog({...emptyErdDialog, open: false})
+                                     }}
+                                     onChange={handleChange}
+                                     handleAccept={handleAccept}
+                        />
                     </Toolbar>
                 </AppBar>
             </div>
 
-            <div>
-                <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">新增E-R图</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            您可以在此处添加新的关系图
-                        </DialogContentText>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            label="名称"
-                            type="text"
-                            fullWidth
-                            onChange={(event)=>{setDataName(event.target.value)}}
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="desc"
-                            label="描述"
-                            type="email"
-                            fullWidth
-                            onChange={(event)=> {setDesc(event.target.value)}}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            取消
-                        </Button>
-                        <Button onClick={handleAccept} color="primary">
-                            确认
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
 
             <main>
                 <Container className={classes.cardGrid} maxWidth="md">
@@ -193,7 +327,7 @@ export default function ErdListPage(props) {
                                 <Card className={classes.card}>
                                     <CardMedia
                                         className={classes.cardMedia}
-                                        image="https://source.unsplash.com/random"
+                                        image={process.env.PUBLIC_URL + '/erdphoto.jpg'}
                                         title="Image title"
                                     />
                                     <CardContent className={classes.cardContent}>

@@ -7,6 +7,7 @@ import './RegisterEdge';
 import './RegisterNode';
 import ToolTip from "./ToolTip";
 import axios from "axios";
+import {data} from "./data";
 
 export default function (props) {
     const ref = React.useRef(null);
@@ -41,8 +42,8 @@ export default function (props) {
             const {x, y} = model;
             const point = graph.getCanvasByPoint(x, y);
             setModel(model);
-            setNodeToolTipX(point.x);
-            setNodeToolTipY(point.y);
+            setNodeToolTipX(evt.clientX);
+            setNodeToolTipY(evt.clientY);
             setShowNodeTooltip(true);
             setNodeModel(item);
         });
@@ -115,7 +116,7 @@ export default function (props) {
                 container: ReactDOM.findDOMNode(ref.current),
                 width: window.innerWidth,
                 height: window.innerHeight,
-                fitView: true,
+                // fitView: true,
 
                 // container: "mountNode",
                 plugins: [minimap, grid],
@@ -148,6 +149,7 @@ export default function (props) {
                         // width: 15
                     }
                 },
+
             });
             setRootGraph(graph);
 

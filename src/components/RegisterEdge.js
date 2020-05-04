@@ -30,7 +30,7 @@ G6.registerEdge('relation', {
         //关系描述
         shapeContainer.addShape('text', {
             attrs: {
-                text: cfg.relation,
+                text: cfg.relationName,
                 x: center.x,
                 y: center.y,
                 textAlign: 'center',

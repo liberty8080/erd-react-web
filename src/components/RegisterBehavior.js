@@ -1,6 +1,6 @@
 import G6 from "@antv/g6";
+import {v4 as uuidv4} from "uuid";
 
-let addedCount = 0;
 G6.registerBehavior('click-add-edge', {
     getEvents() {
         return {
@@ -28,7 +28,7 @@ G6.registerBehavior('click-add-edge', {
             this.edge = graph.addItem('edge', {
                 source: model.id,
                 target: point,
-                type: 'edge'
+                type: 'relation'
             });
             this.addingEdge = true;
         }
@@ -69,11 +69,10 @@ G6.registerBehavior('click-add-entity', {
             x: ev.x,
             //y: ev.canvasY,   //官方教程坐标，不知为何是canvasXY，实际应为x,y
             y: ev.y,
-            id: `node-${addedCount}`, // 生成唯一的 id
+            id: `node-${uuidv4()}`, // 生成唯一的 id
             type: 'entity'
 
         });
-        addedCount++;
     }
 });
 
@@ -89,10 +88,9 @@ G6.registerBehavior("click-add-property",{
             x: ev.x,
             //y: ev.canvasY,   //官方教程坐标，不知为何是canvasXY，实际应为x,y
             y: ev.y,
-            id: `node-${addedCount}`, // 生成唯一的 id
+            id: `node-${uuidv4()}`, // 生成唯一的 id
             type: 'property'
 
         });
-        addedCount++;
     }
-})
+});
