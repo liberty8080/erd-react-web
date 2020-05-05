@@ -153,7 +153,6 @@ function FastAddERD(props) {
     const classes = useStyles();
     const {erdData, handleClose, handleAccept, onChange, entityChange,relationChange,nodes,edges,addRelation,
         addEntity,removeRelation,removeEntity} = props;
-    const [entityInputArray, setEntityInputArray] = useState([]);
     return (
         <div>
             <Dialog open={erdData.open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -216,9 +215,6 @@ function FastAddERD(props) {
                         <Typography variant="subtitle1" className={classes.title}>
                             添加联系
                             <IconButton edge="end" aria-label="delete"
-                                        /*onClick={() => {
-                                            setRelationInputArray([...relationInputArray, uuid()]);
-                                        }}*/
                             onClick={addRelation}>
                                 <AddBox/>
                             </IconButton>
@@ -230,8 +226,6 @@ function FastAddERD(props) {
                                 {edges.map((value, index) => {
                                     return (
                                             <RelationList key={index}  edgeIndex={index}
-                                                          /*onClick={() => setRelationInputArray(
-                                                              relationInputArray.filter(listItem => listItem !== value))}*/
                                                           onDelete={()=>removeRelation(index)}
                                                           nodes={nodes} edges={edges}
                                                           onChange={relationChange(index)}

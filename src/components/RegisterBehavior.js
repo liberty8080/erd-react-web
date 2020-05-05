@@ -19,7 +19,10 @@ G6.registerBehavior('click-add-edge', {
         const model = node.getModel();
         if (this.addingEdge && this.edge) {
             graph.updateItem(this.edge, {
-                target: model.id
+                target: model.id,
+                relation:"1to1",
+                sourceEntity:"1",
+                targetEntity:"1"
             });
             // graph.setItemState(this.edge, 'selected', true);
             this.edge = null;
@@ -28,7 +31,11 @@ G6.registerBehavior('click-add-edge', {
             this.edge = graph.addItem('edge', {
                 source: model.id,
                 target: point,
-                type: 'relation'
+                type: 'relation',
+                relationName:"default",
+                relation:"1to1",
+                sourceEntity:"1",
+                targetEntity:"N"
             });
             this.addingEdge = true;
         }

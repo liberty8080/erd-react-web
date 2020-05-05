@@ -3,6 +3,8 @@ import {Button, Input, Typography} from "@material-ui/core";
 import '../index.css'
 
 export default function ToolTip(props) {
+
+    
     return (
         <div className='nodeTooltips' style={{top: `${props.y}px`, left: `${props.x}px`}}>
             <Typography variant="h6" >

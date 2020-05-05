@@ -13,10 +13,7 @@ import Link from '@material-ui/core/Link';
 import axios from 'axios';
 import {useHistory} from 'react-router-dom';
 import {v4 as uuidv4} from 'uuid';
-import {
-    AppBar, Toolbar,
-
-} from "@material-ui/core";
+import {AppBar, Toolbar} from "@material-ui/core";
 import FastAddERD from "./FastAddERD";
 import AddEmptyErd from "./AddEmptyErd";
 
@@ -97,13 +94,11 @@ export default function ErdListPage(props) {
             erdData: {nodes: [], edges: [], groups: []}
         });
 
-    const [nodes, setNodes] = useState([
-        {
+    const [nodes, setNodes] = useState([{
             id: "",
             type: "",
             label: ""
-        }
-    ]);
+        }]);
 
     const [edges, setEdges] = useState([{
         id: "",
@@ -232,18 +227,6 @@ export default function ErdListPage(props) {
             edge.relationName = e.target.value;
         }
         newRelation[index] = edge;
-        /*       console.info(newRelation[index+1]);
-                   newRelation[index + 1] = {
-                       id: "",
-                       source: "",
-                       target: "",
-                       sourceEntity: "",
-                       targetEntity: "",
-                       relation: "",
-                       type:"",
-                       relationName: ""
-                   };*/
-
         setEdges(newRelation);
     };
 
@@ -272,7 +255,6 @@ export default function ErdListPage(props) {
                                     relationChange={relationChange}
                                     nodes={nodes}
                                     edges={edges}
-
                                     addRelation={() => {
                                         setEdges([...edges, {
                                             id: "",
