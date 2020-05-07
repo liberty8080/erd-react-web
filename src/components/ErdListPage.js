@@ -75,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
 export default function ErdListPage(props) {
     const classes = useStyles();
     const history = useHistory();
-
     const [diagrams, setDiagrams] = useState([]);
     const [userId, setUserId] = useState();
     const [emptyErdDialog, setEmptyDialog] = useState(
@@ -95,10 +94,10 @@ export default function ErdListPage(props) {
         });
 
     const [nodes, setNodes] = useState([{
-            id: "",
-            type: "",
-            label: ""
-        }]);
+        id: "",
+        type: "",
+        label: ""
+    }]);
 
     const [edges, setEdges] = useState([{
         id: "",
@@ -241,9 +240,14 @@ export default function ErdListPage(props) {
                         </Typography>
                         <div className={classes.TopBarSpace}/>
                         <Button variant="outlined"
+                                href="/classErd"
+                                style={{color: "white", marginRight: 5}}>
+                            快速创建实体属性图
+                        </Button>
+                        <Button variant="outlined"
                                 onClick={() => setFastAddErdDialog({...fastAddErdDialog, open: true})}
-                                style={{color: "white"}}>
-                            快速创建ER图
+                                style={{color: "white", marginRight: 5}}>
+                            快速创建实体联系图
                         </Button>
                         <FastAddERD erdData={fastAddErdDialog}
                                     handleClose={() => {

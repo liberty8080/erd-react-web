@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -60,7 +58,7 @@ export default function SignIn(props) {
             .then((res) => {
                 let userId = res.data.data;
                 if (res.data.success === true) {
-                    history.push("/erdList/"+userId)
+                    history.push("/erdList/" + userId)
                 }
             })
     };
@@ -115,7 +113,7 @@ export default function SignIn(props) {
                         登录
                     </Button>
                     <Grid container>
-{/*                        <Grid item xs>
+                        {/*                        <Grid item xs>
                             <Link href="#" variant="body2">
                                 忘记密码?
                             </Link>

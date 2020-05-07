@@ -20,9 +20,9 @@ G6.registerBehavior('click-add-edge', {
         if (this.addingEdge && this.edge) {
             graph.updateItem(this.edge, {
                 target: model.id,
-                relation:"1to1",
-                sourceEntity:"1",
-                targetEntity:"1"
+                relation: "1to1",
+                sourceEntity: "1",
+                targetEntity: "1"
             });
             // graph.setItemState(this.edge, 'selected', true);
             this.edge = null;
@@ -32,10 +32,10 @@ G6.registerBehavior('click-add-edge', {
                 source: model.id,
                 target: point,
                 type: 'relation',
-                relationName:"default",
-                relation:"1to1",
-                sourceEntity:"1",
-                targetEntity:"N"
+                relationName: "default",
+                relation: "1to1",
+                sourceEntity: "1",
+                targetEntity: "N"
             });
             this.addingEdge = true;
         }
@@ -77,13 +77,13 @@ G6.registerBehavior('click-add-entity', {
             //y: ev.canvasY,   //官方教程坐标，不知为何是canvasXY，实际应为x,y
             y: ev.y,
             id: `node-${uuidv4()}`, // 生成唯一的 id
-            type: 'entity'
+            type: 'classRect'
 
         });
     }
 });
 
-G6.registerBehavior("click-add-property",{
+G6.registerBehavior("click-add-property", {
     getEvents() {
         return {
             'canvas:click': 'onClick'

@@ -17,14 +17,14 @@ export default function SwitchEditModes(props) {
 
     return (
         <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label" style={{color:"white"}}>编辑模式</InputLabel>
+            <InputLabel id="demo-simple-select-outlined-label" style={{color: "white"}}>编辑模式</InputLabel>
             <Select
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
                 value={props.value}
                 onChange={props.handleChange}
                 label="EditMode"
-                style={{color:"white"}}
+                style={{color: "white"}}
             >
                 <MenuItem value="default">
                     <em>默认</em>

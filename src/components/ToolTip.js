@@ -4,15 +4,15 @@ import '../index.css'
 
 export default function ToolTip(props) {
 
-    
+
     return (
         <div className='nodeTooltips' style={{top: `${props.y}px`, left: `${props.x}px`}}>
-            <Typography variant="h6" >
+            <Typography variant="h6">
                 编辑节点
             </Typography>
             <div>
                 <Input
-                    placeholder={"节点名称： "+props.label}
+                    placeholder={"节点名称： " + props.label}
                     onKeyUp={props.updateLabel}
                 />
                 <p/>

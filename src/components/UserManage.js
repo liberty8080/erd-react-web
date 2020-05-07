@@ -1,25 +1,25 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {
-    TableContainer,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    makeStyles,
-    Paper,
+    AppBar,
     Button,
     ButtonGroup,
-    Typography,
-    AppBar,
-    Toolbar,
     Dialog,
-    DialogTitle,
+    DialogActions,
     DialogContent,
     DialogContentText,
+    DialogTitle,
+    makeStyles,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
     TextField,
-    DialogActions
+    Toolbar,
+    Typography
 } from "@material-ui/core";
 import {v4 as uuid} from 'uuid';
 
@@ -94,10 +94,10 @@ function UserManage() {
             .then((res) => {
                 if (res.data.success === true) {
                     let userArrayTemp = [...usersData];
-                    userArrayTemp.map((user,index)=>{
-                        if(user.userId === userId){
-                            user.name=username;
-                            user.password=password;
+                    userArrayTemp.map((user, index) => {
+                        if (user.userId === userId) {
+                            user.name = username;
+                            user.password = password;
                             console.log(user)
                         }
                         return null;

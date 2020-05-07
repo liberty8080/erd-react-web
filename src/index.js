@@ -5,7 +5,6 @@ import * as serviceWorker from './serviceWorker';
 import {applyMiddleware, createStore} from "redux";
 import {Provider} from "react-redux"
 import rootReducer from "./reducers";
-import NavigationBar from "./components/NavigationBar";
 import logger from "redux-logger";
 import {composeWithDevTools} from "redux-devtools-extension";
 import thunk from "redux-thunk";

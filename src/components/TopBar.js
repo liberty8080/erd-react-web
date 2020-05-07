@@ -39,8 +39,8 @@ function ToolBar(props) {
         // let desc = "描述";
         // let name = "名称";
         axios.post("http://192.168.98.11:8080/erd/user-data/updateErd",
-            {data:JSON.stringify(data),dataId})
-            .then((res)=>{
+            {data: JSON.stringify(data), dataId})
+            .then((res) => {
                 console.log(res.data)
             });
         console.log(data)

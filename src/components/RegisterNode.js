@@ -11,13 +11,31 @@ G6.registerNode('entity', {
     },
     'rect');
 
-G6.registerNode('property',{
-    options:{
-        style:{
-            stroke:"#72CC4A",
-            fill:'#6fd4ff'
+G6.registerNode('property', {
+    options: {
+        style: {
+            stroke: "#72CC4A",
+            fill: '#6fd4ff'
         },
-        size:[80,40]
+        size: [80, 40]
     }
-},'ellipse');
+}, 'ellipse');
+
+G6.registerNode('classRect', {
+    draw(cfg, group) {
+        console.info("draw");
+        return group.addShape('rect', {
+            attrs: {
+                attrs: {
+                    fill: 'red',
+                    shadowOffsetX: 10,
+                    shadowOffsetY: 10,
+                    shadowColor: 'blue',
+                    shadowBlur: 10,
+                    opacity: 0.8
+                }
+            }
+        })
+    }
+});
 

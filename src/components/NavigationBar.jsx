@@ -1,4 +1,4 @@
-import {AppBar, Toolbar, IconButton, Typography, makeStyles, Button} from "@material-ui/core";
+import {AppBar, Button, IconButton, makeStyles, Toolbar, Typography} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 
 import React from "react";
@@ -28,7 +28,7 @@ function NavigationBar() {
                         ErdEditor
                     </Typography>
                     <div className={classes.signupButton}/>
-                    <Button variant="outlined"  href="/signup" style={{color:"white"}}>
+                    <Button variant="outlined" href="/signup" style={{color: "white"}}>
                         注册
                     </Button>
                 </Toolbar>

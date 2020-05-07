@@ -235,7 +235,7 @@ export default function (props) {
                 },
                 layout: {
                     type: 'force',
-                    center: [ 200, 200 ],     // 可选，默认为图的中心
+                    center: [200, 200],     // 可选，默认为图的中心
                     linkDistance: 300,         // 可选，边长
                     nodeStrength: 30,         // 可选
                     edgeStrength: 0.1,        // 可选
@@ -245,11 +245,11 @@ export default function (props) {
                     alphaDecay: 0.028,        // 可选
                     alphaMin: 0.01,           // 可选
                     forceSimulation: null,    // 可选
-                   /* onTick: () => {           // 可选
-                    },
-                    onLayoutEnd: () => {      // 可选
-                        console.log('force layout done');
-                    }*/
+                    /* onTick: () => {           // 可选
+                     },
+                     onLayoutEnd: () => {      // 可选
+                         console.log('force layout done');
+                     }*/
                 }
 
             });

@@ -1,24 +1,26 @@
-import React, {useState} from "react";
+import React from "react";
 import {
-    DialogActions,
-    Dialog,
-    DialogTitle,
-    DialogContentText,
-    DialogContent,
-    TextField,
     Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    FormControl,
+    Grid,
+    IconButton,
+    InputLabel,
     List,
     ListItem,
-    Grid,
-    Typography,
-    ListItemSecondaryAction, Select,
-    IconButton, FormControl, InputLabel, MenuItem
+    ListItemSecondaryAction,
+    MenuItem,
+    Select,
+    TextField,
+    Typography
 } from "@material-ui/core";
-import {v4 as uuid} from 'uuid'
 import AddBox from '@material-ui/icons/AddBox'
 import DeleteIcon from '@material-ui/icons/Delete';
 import {makeStyles} from "@material-ui/core/styles";
-import index from "../reducers";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -68,8 +70,7 @@ function EntityList(props) {
 
 function RelationList(props) {
     const classes = useStyles();
-    const {onDelete, nodes,onChange,edges,edgeIndex} = props;
-
+    const {onDelete, nodes, onChange, edges, edgeIndex} = props;
 
 
     return (<div>
@@ -85,11 +86,11 @@ function RelationList(props) {
                     onChange={onChange}
                 >
                     {
-                        nodes.map((node,index) => {
-                        return (
-                            <MenuItem key={index} value={node.id}>{node.label}</MenuItem>
-                        )
-                    })}
+                        nodes.map((node, index) => {
+                            return (
+                                <MenuItem key={index} value={node.id}>{node.label}</MenuItem>
+                            )
+                        })}
                 </Select>
             </FormControl>
             <FormControl className={classes.formControl}>
@@ -119,7 +120,7 @@ function RelationList(props) {
                     value={edges[edgeIndex].target}
                 >
                     {
-                        nodes.map((node,index) => {
+                        nodes.map((node, index) => {
                             return (
                                 <MenuItem key={index} value={node.id}>{node.label}</MenuItem>
                             )
@@ -128,19 +129,19 @@ function RelationList(props) {
             </FormControl>
             <FormControl className={classes.formControl}>
 
-            <TextField
-                margin="dense"
-                label="关系"
-                name="relationName"
-                // type="email"
-                fullWidth
-                onChange={onChange}
-            />
+                <TextField
+                    margin="dense"
+                    label="关系"
+                    name="relationName"
+                    // type="email"
+                    fullWidth
+                    onChange={onChange}
+                />
             </FormControl>
 
-                <IconButton edge="end" aria-label="delete" onClick={onDelete}>
-                    <DeleteIcon/>
-                </IconButton>
+            <IconButton edge="end" aria-label="delete" onClick={onDelete}>
+                <DeleteIcon/>
+            </IconButton>
             <ListItemSecondaryAction>
 
             </ListItemSecondaryAction>
@@ -151,12 +152,14 @@ function RelationList(props) {
 
 function FastAddERD(props) {
     const classes = useStyles();
-    const {erdData, handleClose, handleAccept, onChange, entityChange,relationChange,nodes,edges,addRelation,
-        addEntity,removeRelation,removeEntity} = props;
+    const {
+        erdData, handleClose, handleAccept, onChange, entityChange, relationChange, nodes, edges, addRelation,
+        addEntity, removeRelation, removeEntity
+    } = props;
     return (
         <div>
-            <Dialog open={erdData.open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">新增E-R图</DialogTitle>
+            <Dialog open={erdData.open} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="xl">
+                <DialogTitle id="form-dialog-title">新增实体联系图</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         您可以在此处添加新的关系图
@@ -201,9 +204,11 @@ function FastAddERD(props) {
                                 {nodes.map((value, index) => {
                                     return (
                                         <EntityList key={index}
-                             /*                       onClick={() => setEntityInputArray(
-                                                        entityInputArray.filter(listItem => listItem !== value))}*/
-                                                    onClick={()=>{removeEntity(index)}}
+                                            /*                       onClick={() => setEntityInputArray(
+                                                                       entityInputArray.filter(listItem => listItem !== value))}*/
+                                                    onClick={() => {
+                                                        removeEntity(index)
+                                                    }}
                                                     onChange={entityChange(index)}/>
                                     )
                                 })}
@@ -215,7 +220,7 @@ function FastAddERD(props) {
                         <Typography variant="subtitle1" className={classes.title}>
                             添加联系
                             <IconButton edge="end" aria-label="delete"
-                            onClick={addRelation}>
+                                        onClick={addRelation}>
                                 <AddBox/>
                             </IconButton>
                         </Typography>
@@ -225,11 +230,11 @@ function FastAddERD(props) {
                             <List dense={false}>
                                 {edges.map((value, index) => {
                                     return (
-                                            <RelationList key={index}  edgeIndex={index}
-                                                          onDelete={()=>removeRelation(index)}
-                                                          nodes={nodes} edges={edges}
-                                                          onChange={relationChange(index)}
-                                            />
+                                        <RelationList key={index} edgeIndex={index}
+                                                      onDelete={() => removeRelation(index)}
+                                                      nodes={nodes} edges={edges}
+                                                      onChange={relationChange(index)}
+                                        />
                                     )
                                 })}
                             </List>
