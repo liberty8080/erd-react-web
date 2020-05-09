@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,14 +8,22 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import {Button, IconButton, TextField} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import {
+    Button,
+    FormControl,
+    IconButton,
+    InputLabel,
+    ListItemSecondaryAction,
+    MenuItem,
+    Select,
+    TextField
+} from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddBox from '@material-ui/icons/AddBox'
-
+import AddToQueueIcon from '@material-ui/icons/AddToQueue';
+import SendIcon from '@material-ui/icons/Send';
+import axios from "axios";
 
 const drawerWidth = document.body.clientWidth * 0.5;
 
@@ -40,10 +48,16 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
 }));
 
 function EntityInput(props) {
-    const {onChange, onDelete, onPropDelete, onPropChange, addProperty, entity} = props;
+    const classes = useStyles();
+    const {onChange, onDelete, onPropDelete, onPropChange, addProperty, entity, erdData, onFkChange} = props;
+    const relation = useRef("1to1");
     return (
         <React.Fragment>
             <ListItem>
@@ -63,6 +77,48 @@ function EntityInput(props) {
                 <IconButton edge="end" aria-label="delete" onClick={onDelete}>
                     <DeleteIcon/>
                 </IconButton>
+            </ListItem>
+            <ListItem>
+                <FormControl className={classes.formControl}>
+                    <InputLabel shrink htmlFor="relation-placeholder">
+                        联系
+                    </InputLabel>
+                    <Select
+                        // value={relation}
+                        displayEmpty={true}
+                        name="relation"
+                        ref={relation}
+                        defaultValue={"1toN"}
+                    >
+                        <MenuItem value={"1to1"}>一对一</MenuItem>
+                        <MenuItem value={"1toN"}>一对多</MenuItem>
+                        <MenuItem value={"NtoN"}>多对多</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl className={classes.formControl}>
+                    <InputLabel shrink htmlFor="relation-placeholder">
+                        目标实体
+                    </InputLabel>
+                    <Select
+                        displayEmpty={true}
+                        name="target"
+                        onChange={onFkChange}
+                        // value={}
+                        value={entity.fk}
+                    >
+                        {
+                            erdData.map((item, index) => (
+                                <MenuItem key={index} value={item.entity}>{item.entity}</MenuItem>
+                            ))
+                        }
+                    </Select>
+                </FormControl>
+
+
+                <ListItemSecondaryAction>
+
+                </ListItemSecondaryAction>
             </ListItem>
 
             {entity.column.map((data, index) => (
@@ -85,11 +141,80 @@ function EntityInput(props) {
     )
 }
 
+/*function RelationInput(props) {
+    const classes = useStyles();
+    const {onDelete, onChange, erdData} = props;
+
+
+    return (<div>
+        <ListItem>
+            <FormControl className={classes.formControl}>
+                <InputLabel shrink htmlFor="relation-placeholder">
+                    起点
+                </InputLabel>
+                <Select
+                    displayEmpty={true}
+                    value={erdData}
+                    name='source'
+                    onChange={onChange}
+                >
+                    {
+                        erdData.map((item, entityIndex) => (
+                                <MenuItem key={entityIndex} value={item.entity}>{item.entity}</MenuItem>
+                            )
+                        )
+                    }
+                </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+                <InputLabel shrink htmlFor="relation-placeholder">
+                    联系
+                </InputLabel>
+                <Select
+                    // value={}
+                    displayEmpty={true}
+
+                    name="relation"
+                    onChange={onChange}
+                >
+                    <MenuItem value={"1to1"}>一对一</MenuItem>
+                    <MenuItem value={"1toN"}>一对多</MenuItem>
+                    <MenuItem value={"NtoN"}>多对多</MenuItem>
+                </Select>
+            </FormControl>
+
+            <FormControl className={classes.formControl}>
+                <InputLabel shrink htmlFor="relation-placeholder">
+                    终点
+                </InputLabel>
+                <Select
+                    displayEmpty={true}
+                    name="target"
+                    onChange={onChange}
+                    // value={}
+                >
+                    {
+                    }
+                </Select>
+            </FormControl>
+
+
+            <IconButton edge="end" aria-label="delete" onClick={onDelete}>
+                <DeleteIcon/>
+            </IconButton>
+            <ListItemSecondaryAction>
+
+            </ListItemSecondaryAction>
+        </ListItem>
+    </div>)
+
+}*/
+
 export default function ClassErd() {
     const classes = useStyles();
 
     const [erdData, setErdData] = useState([{entity: "", column: [""], fk: ""}]);
-
+    const [image, setImage] = useState("default");
     useEffect(() => {
 
     }, [erdData]);
@@ -97,8 +222,13 @@ export default function ClassErd() {
     const onEntityChange = index => e => {
         let data = erdData;
         data[index].entity = e.target.value;
-        setErdData(data.slice())
-        console.info("erdData", erdData)
+        setErdData(data.slice());
+    };
+
+    const onFkChange = index => e => {
+        let data = erdData;
+        data[index].fk = e.target.value;
+        setErdData(data.slice());
     };
 
     const onPropChange = entityIndex => propIndex => e => {
@@ -117,6 +247,14 @@ export default function ClassErd() {
         let data = erdData;
         data[entityIndex].column = data[entityIndex].column.filter((item, index0) => index0 !== propIndex);
         setErdData(data.slice())
+    };
+
+
+    const generateErd = () => {
+        axios.post("http://192.168.98.11:5000/", {erdData})
+            .then((res) => {
+                setImage(res.data)
+            })
     };
     return (
         <div className={classes.root}>
@@ -137,58 +275,52 @@ export default function ClassErd() {
                 }}
             >
                 <Toolbar/>
-                <Button onClick={() => setErdData([...erdData, {entity: "", column: [""], fk: ""}])}>添加实体</Button>
-                <Button></Button>
+                <div>
+                    <Button startIcon={<AddToQueueIcon/>} color="primary"
+                            onClick={() => setErdData([...erdData, {entity: "", column: [""], fk: ""}])}>添加实体</Button>
+                    <Button startIcon={<SendIcon/>} style={{float: "right"}} color="primary"
+                            onClick={generateErd}>生成</Button>
+                </div>
+
                 <div className={classes.drawerContainer}>
                     <List>
                         {erdData.map((data, index) => (
                                 <EntityInput key={index} onChange={onEntityChange(index)}
                                              onDelete={() => {
-                                                 setErdData(erdData.filter((item, index0) => index !== index0))
-                                                 console.info(erdData)
+                                                 setErdData(erdData.filter((item, index0) => index !== index0));
                                              }}
                                              entity={data} onPropDelete={onPropDelete(index)}
                                              onPropChange={onPropChange(index)}
                                              addProperty={addProperty(index)}
+                                             erdData={erdData}
+                                             onFkChange={onFkChange(index)}
                                 />
                             )
                         )}
-                    </List>
-                    <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItem>
-                        ))}
                     </List>
                 </div>
             </Drawer>
             <main className={classes.content}>
                 <Toolbar/>
-                <Typography paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                    ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-                    facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-                    gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-                    donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                    adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-                    Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-                    imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-                    arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-                    donec massa sapien faucibus et molestie ac.
-                </Typography>
-                <Typography paragraph>
-                    Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-                    facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-                    tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-                    consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-                    vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-                    hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-                    tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-                    nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-                    accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-                </Typography>
+                {
+                image==="default"?null:(
+                    <Grid
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="flex-start"
+                        justify="center"
+                    >
+                        <Grid item xs={3}>
+                            <img src={"http://192.168.98.11:5000/image/" + image + ".png"}
+                                 style={{minWidth: 500}}/>
+                        </Grid>
+
+                    </Grid>
+                    )
+                }
+
+
             </main>
         </div>
     );
